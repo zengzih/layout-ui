@@ -1,0 +1,23 @@
+:root {
+  /* 边距
+  --------------------------*/
+  --content-padding-verticle: 15px;
+  --content-padding-horrizon: 15px;
+
+  --margin: 20px;
+  --padding: 15px;
+
+  --admin-header-height: 50px;
+  --admin-sider-width: 60px;
+  --admin-sider-width-toggled: 0px;
+
+  --admin-bg-color: #3e4359;
+  --admin-font-color: #fff;
+  --admin-hover-color: #5b7bfa;
+  --admin-active-color: #5b7bfa;
+  --admin-font-active-color: #5b7bfa;
+
+  /*----标准化弹窗样式*/
+  --standardize-dialog-padding:6px;
+  --standardize-dialog-fontSize:6px;
+}

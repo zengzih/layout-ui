@@ -1,0 +1,180 @@
+<template>
+    <sc-admin :menuTree="menusData"></sc-admin>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      editableTabsValue: 'u1',
+      editableTabs: [
+        {
+          title: '申赎表分析',
+          name: 'u1',
+          url: 'http://element.eleme.io/'
+        }
+      ],
+      menusData: [
+        {
+          name: '组合概览',
+          index: '1',
+          sort: 1,
+          subMenus: [
+            {
+              name: '申赎表分析',
+              index: 'u1',
+              mode: 'iframe',
+              url: 'http://element.eleme.io/',
+              sort: 1
+            }, {
+              name: '资产规模查询',
+              index: 'u2',
+              mode: 'iframe',
+              url: 'http://www.wescxx.com',
+              sort: 2
+            }, {
+              name: '组合规模变动表',
+              index: 'u3',
+              mode: 'iframe',
+              url: 'http://www.baidu.com',
+              sort: 3
+            }, {
+              name: '资产走势一览',
+              index: 'u4',
+              mode: 'iframe',
+              url: 'http://www.qq.com',
+              sort: 4
+            }
+          ]
+        },
+        {
+          name: '债券回购',
+          index: '2',
+          sort: 2,
+          subMenus: [
+            {
+              name: '询价指令查询',
+              index: '1.1',
+              sort: 1
+            }, {
+              name: '交易清算统计',
+              index: '1.2',
+              sort: 2
+            }, {
+              name: '银行间清算确认',
+              index: '1.3',
+              sort: 3
+            }, {
+              name: '银行间账户余额查询',
+              index: '1.4',
+              sort: 4
+            }, {
+              name: '场外债券交易查询',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '质押券查询',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '质押券信息核对',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '组合久期与期限查询',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '债券库查询',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '城投债设置',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '突发收付金额维护',
+              index: '1.4',
+              sort: 5
+            }
+          ]
+        },
+        {
+          name: '存款管理',
+          index: '3',
+          sort: 2,
+          subMenus: [
+            {
+              name: '询价管理',
+              index: '1.1',
+              sort: 1
+            }, {
+              name: '协议管理',
+              index: '1.2',
+              sort: 2
+            }, {
+              name: '提前支取',
+              index: '1.3',
+              sort: 3
+            }, {
+              name: '框架协议',
+              index: '1.4',
+              sort: 4
+            }, {
+              name: '提前支取模板',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款协议核对',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款业务导出',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '授信额度监控',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款比例监控',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款监控',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '银行报价报表',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款比例设置',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款模板设置',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '存款期限设置',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '银行联系人设置',
+              index: '1.4',
+              sort: 5
+            }, {
+              name: '银行信息设置',
+              index: '1.4',
+              sort: 5
+            }
+          ]
+        }
+      ]
+    }
+  },
+  methods: {
+  }
+}
+</script>

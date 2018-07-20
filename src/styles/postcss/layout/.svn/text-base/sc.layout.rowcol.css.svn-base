@@ -1,0 +1,136 @@
+@charset "UTF-8";
+
+@import "../mixins/sc.mixins.util.css";
+
+/* 行布局：.sc-row, .sc-row--flex, .sc-row--felx.is-justify-center ···
+-------------------------- */
+@component-namespace sc {
+  @b row {
+	@mixin container;
+
+    @m flex {
+      @mixin container-flex;
+
+      @when justify-center {
+        justify-content: center;
+      }
+      @when justify-end {
+        justify-content: flex-end;
+      }
+      @when justify-space-between {
+        justify-content: space-between;
+      }
+      @when justify-space-around {
+        justify-content: space-around;
+      }
+
+      @when align-middle {
+        align-items: center;
+      }
+      @when align-bottom {
+        align-items: flex-end;
+      }
+    }
+
+  }
+}
+
+/* 列布局：.sc-col-1, .sc-col-2 ···
+-------------------------- */
+.sc-col-1, .sc-col-2, .sc-col-3, .sc-col-4, .sc-col-5, .sc-col-6, .sc-col-7, .sc-col-8, .sc-col-9, .sc-col-10, .sc-col-11, .sc-col-12, .sc-col-13, .sc-col-14, .sc-col-15, .sc-col-16, .sc-col-17, .sc-col-18, .sc-col-19, .sc-col-20, .sc-col-21, .sc-col-22, .sc-col-23, .sc-col-24 {
+  float: left;
+  box-sizing: border-box;
+}
+
+@for $i from 1 to 24 {
+  .sc-col-$i {
+    width: calc(1 / 24 * $(i) * 100)%;
+  }
+  .sc-col-offset-$i {
+    margin-left: calc(1 / 24 * $(i) * 100)%;
+  }
+  .sc-col-pull-$i {
+    position: relative;
+    right: calc(1 / 24 * $(i) * 100)%;
+  }
+  .sc-col-push-$i {
+    position: relative;
+    left: calc(1 / 24 * $(i) * 100)%;
+  }
+}
+
+/* 响应式列宽：.sc-col-xs-*, .sc-col-sm-*, .sc-col-md-*, .sc-col-lg-* ···
+-------------------------- */
+@media (max-width: 768px) {
+  @for $i from 1 to 24 {
+    .sc-col-xs-$i {
+      width: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-xs-offset-$i {
+      margin-left: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-xs-pull-$i {
+      position: relative;
+      right: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-xs-push-$i {
+      position: relative;
+      left: calc(1 / 24 * $(i) * 100)%;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  @for $i from 1 to 24 {
+    .sc-col-sm-$i {
+      width: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-sm-offset-$i {
+      margin-left: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-sm-pull-$i {
+      position: relative;
+      right: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-sm-push-$i {
+      position: relative;
+      left: calc(1 / 24 * $(i) * 100)%;
+    }
+  }
+}
+@media (min-width: 992px) {
+  @for $i from 1 to 24 {
+    .sc-col-md-$i {
+      width: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-md-offset-$i {
+      margin-left: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-md-pull-$i {
+      position: relative;
+      right: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-md-push-$i {
+      position: relative;
+      left: calc(1 / 24 * $(i) * 100)%;
+    }
+  }
+}
+@media (min-width: 1200px) {
+  @for $i from 1 to 24 {
+    .sc-col-lg-$i {
+      width: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-lg-offset-$i {
+      margin-left: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-lg-pull-$i {
+      position: relative;
+      right: calc(1 / 24 * $(i) * 100)%;
+    }
+    .sc-col-lg-push-$i {
+      position: relative;
+      left: calc(1 / 24 * $(i) * 100)%;
+    }
+  }
+}

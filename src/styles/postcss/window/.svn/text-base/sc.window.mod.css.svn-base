@@ -1,0 +1,218 @@
+@component-namespace sc {
+	@b theme {
+
+	}
+	
+	@b header {
+		position: relative;
+		overflow: hidden;
+	}
+	@b  body {
+		position: relative;
+		overflow: auto;
+	}
+	@b footer {
+		position: relative;
+		overflow: hidden;
+	}
+	
+	@b title {
+		@mixin font-size_title;
+	}
+	
+	@b content {
+		@mixin font-size_main;
+	}
+	
+	@b box {
+		height: 100%;
+		@mixin border-box;
+		border: 1px solid #C3C9D3;
+		
+		&+.sc-box {
+			margin-left: 10px;
+		}
+		
+		@when flex {
+			@mixin flexitem;
+		}
+		@when small {
+			width: 16%;
+		}
+		@when large {
+			width: 27.9%;
+		}
+		
+		@when flex2 {
+			@mixin flexn 2;
+		}
+		
+		@when red {
+			background: #FEF6F6;
+			border: 1px solid #F6DADA;
+		}
+		
+		@when green {
+			background: #F6FEF8;
+			border: 1px solid #D3F4E5;
+		}
+		
+		@when yellow {
+			background: #FFFAF3;
+			border: 1px solid #FFF1E0;
+		}
+		
+		@when yellow2 {
+			background: #FEFDF6;
+			border: 1px solid #F6F0DA;
+		}
+		
+		@when blue {
+			background: #F6F8FE;
+			border: 1px solid #D8E1F6;
+		}
+		
+		@when transparent {
+			background: transparent;
+			border: 0;
+		}
+	}
+	
+	@b card {
+		@m accordion {
+			/*
+			  可折叠卡片
+			  ----------
+			*/
+			overflow: hidden;
+			border: 1px solid #C3C9D3;
+			@mixin font-color_main;
+			@mixin border-box;
+			
+			&+.sc-card--accordion {
+				margin-top: 15px;
+			}
+			
+			@b header {
+				height: 180px;
+				z-index: 1;
+				@mixin border-box;
+				@mixin padding_normal;
+				@mixin bgcolor_pannel;
+			  padding-top:0;
+				.sc-title {
+          cursor: pointer;
+					padding-bottom: 10px;
+					@mixin border-box;
+          padding-top: 15px;
+				}
+				.sc-content {
+					height: 120px;
+					@mixin font-size_small;
+					@mixin flexbox;
+					ul {
+						&.sc-box {
+							padding: 18px 15px;
+              box-sizing: border-box;
+						}
+            &.sc-box:hover{
+                transition: all 0.15s linear;
+                border:1px solid #72baef;
+                box-sizing:border-box;
+             }
+						li {
+							font-family: PingFangSC-Medium;
+							font-size: 14px;
+							color: #353535;
+							white-space:nowrap;
+							&+li {
+								margin-top: 10px;
+							}
+							b {
+								margin-right: 8px;
+								a {
+									// font-weight: normal;
+								}
+							}
+							span {
+								&.red {
+									color: #FB6255;
+								}
+								&.green {
+									color: #29CDC7;
+								}
+							}
+							.tag {
+								@when red {
+									color: #FB6255;
+									border-color: #FB6255;
+								}
+								@when green {
+									color: #29CDC7;
+									border-color: #29CDC7;
+								}
+							}
+						}
+					}
+          .center{
+            i.iconfont{
+              font-size: 30px;
+            }
+          }
+				}
+			}
+			@b body {
+				/*height: 180px;*/
+				@mixin border-box;
+				
+				/*margin-top:-180px;*/
+				/*overflow: hidden;*/
+				border-top: 1px solid #C3C9D3;
+				
+				/*@mixin _transition all;*/
+				/*opacity: 0;*/
+			}
+			@b footer {
+				border: 1px solid #e0e0e0;
+			}
+			
+			@when open {
+				@b body {
+					margin-top: 0px;
+					opacity: 1;
+					height: auto;
+					max-height: none;
+					overflow: auto;
+          .sc-title-btn{
+             height:52px;
+             line-height: 52px;
+             background:#fff;
+             padding:0 15px;
+             button{
+                cursor: pointer;
+                height: 32px;
+                min-width: 112px;
+                outline: none;
+                border:none;
+                background:#5B7BFA;
+                margin-right: 20px;
+                vertical-align: middle;
+                border-radius: 2px;
+                text-align: center;
+                font:12px/32px "微软雅黑";
+                color:#fff;
+             }
+             b,span{
+               font:12px/52px "微软雅黑";
+               color:#353535;
+             }
+             span{
+               margin-left: 10px;
+               margin-right:30px;
+             }
+          }
+				}
+			}
+		}
+	}
+}

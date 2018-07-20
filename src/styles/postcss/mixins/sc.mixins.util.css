@@ -1,0 +1,331 @@
+@define-mixin container {
+	position: relative;
+	overflow: hidden;
+	@utils-clearfix;
+}
+
+@define-mixin container-flex {
+	&:before, &:after {
+		display: none;
+	}
+	  display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+@define-mixin border-box {
+	box-sizing: border-box;
+}
+
+@define-mixin _transition $prop {
+    transition: $prop .3s ease-in-out;
+    -moz-transition: $prop .3s ease-in-out;
+    -webkit-transition: $prop .3s ease-in-out;
+    -o-transition: $prop .3s ease-in-out;
+}
+
+@define-mixin _animation $kf {
+	animation: $kf .3s;
+    -moz-animation: $kf .3s; /* Firefox */
+    -webkit-animation: $kf .3s;  /* Safari 和 Chrome */
+    -o-animation: $kf .3s;   /* Opera */
+}
+
+@define-mixin _rotate $deg {
+	transform:rotate($deg);
+	-ms-transform:rotate($deg);
+	-moz-transform:rotate($deg);
+	-webkit-transform:rotate($deg);
+	-o-transform:rotate($deg);
+}
+
+@define-mixin _translate $x,$y {
+	transform: translate($x, $y);
+	-ms-transform: translate($x, $y);
+	-moz-transform: translate($x, $y);
+	-webkit-transform: translate($x, $y);
+	-o-transform: translate($x, $y);
+}
+
+@define-mixin _translateX $x {
+	transform: translateX($x);
+	-ms-transform: translateX($x);
+	-moz-transform: translateX($x);
+	-webkit-transform: translateX($x);
+	-o-transform: translateX($x);
+}
+
+@define-mixin _translateY $y {
+	transform: translateY($y);
+	-ms-transform: translateY($y);
+	-moz-transform: translateY($y);
+	-webkit-transform: translateY($y);
+	-o-transform: translateY($y);
+}
+
+@define-mixin flexbox {
+	display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+@define-mixin flexitem {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+@define-mixin flexn $n {
+    -webkit-box-flex: $n;
+    -webkit-flex: $n;
+    flex: $n;
+}
+
+@define-mixin padding {
+	padding: 15px;
+}
+
+@define-mixin setLeftLine $w $c  {
+    &:before {
+        content: " ";
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        border-left: $w solid $c;
+    }
+}
+
+@define-mixin setRightLine $w $c  {
+	&:before {
+        content: " ";
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        border-right: $w solid $c;
+	}
+}
+
+@define-mixin setTopArrow $arrowsize $borderWidth $borderColor {
+	display: inline-block;
+    height: $arrowsize;
+    width: $arrowsize;
+    border-width: $borderWidth $borderWidth 0 0;
+    border-color: $borderColor;
+    border-style: solid;
+
+    transform: matrix(0.71,-0.71,0.71,0.71,0,0); /* rotate(-45deg); */
+
+    position: relative;
+    top: -2px;
+}
+
+@define-mixin setRightArrow $arrowsize $borderWidth $borderColor {
+	display: inline-block;
+    height: $arrowsize;
+    width: $arrowsize;
+    border-width: $borderWidth $borderWidth 0 0;
+    border-color: $borderColor;
+    border-style: solid;
+
+    transform: matrix(0.71,0.71,-0.71,0.71,0,0); /* rotate(45deg); */
+
+    position: relative;
+    top: -2px;
+}
+
+@define-mixin setDownArrow $arrowsize $borderWidth $borderColor {
+	display: inline-block;
+    height: $arrowsize;
+    width: $arrowsize;
+    border-width: $borderWidth $borderWidth 0 0;
+    border-color: $borderColor;
+    border-style: solid;
+
+    transform: matrix(-0.71,0.71,-0.71,-0.71,0,0); /* rotate(135deg); */
+
+    position: relative;
+    top: -2px;
+}
+
+@define-mixin setLeftArrow $arrowsize $borderWidth $borderColor {
+	display: inline-block;
+    height: $arrowsize;
+    width: $arrowsize;
+    border-width: $borderWidth $borderWidth 0 0;
+    border-color: $borderColor;
+    border-style: solid;
+
+    transform: matrix(-0.71,-0.71,0.71,-0.71,0,0); /* rotate(-135deg); */
+
+    position: relative;
+    top: -2px;
+}
+
+/*
+	盒规范
+	----------------------------
+
+*/
+@define-mixin box_small {
+	box-sizing: border-box;
+	width: 100px;
+	height: 100px;
+}
+
+@define-mixin box_normal {
+	box-sizing: border-box;
+	width: 200px;
+	height: 200px;
+}
+
+@define-mixin box_middle {
+	box-sizing: border-box;
+	width: 300px;
+	height: 300px;
+}
+
+@define-mixin box_large {
+	box-sizing: border-box;
+	width: 500px;
+	height: 500px;
+}
+
+/*
+	背景色
+	----------------------------
+
+*/
+@define-mixin bgcolor_page {
+	background-color: #ededef;
+}
+
+@define-mixin bgcolor_pannel {
+	background-color: #ffffff;
+}
+
+@define-mixin bgcolor_content {
+	background-color: #ffffff;
+}
+
+
+/*
+	间距
+	----------------------------
+
+*/
+@define-mixin margin_small {
+	margin: 10px;
+}
+
+@define-mixin margin_normal {
+	margin: 15px;
+}
+
+@define-mixin margin_middle {
+	margin: 20px;
+}
+
+@define-mixin margin_large {
+	margin: 30px;
+}
+
+@define-mixin padding_small {
+	padding: 10px;
+}
+
+@define-mixin padding_normal {
+	padding: 15px;
+}
+
+@define-mixin padding_middle {
+	padding: 20px;
+}
+
+@define-mixin padding_large {
+	padding: 30px;
+}
+
+/*
+	字体类型
+	----------------------------
+*/
+@define-mixin font-style {
+	font-family: "Helvetica Neue",Helvetica,Arial,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",sans-serif;
+}
+
+
+/*
+	字体大小
+	----------------------------
+	标题字体大小		font-size_title
+	小标题字体大小		font-size_subtitle
+	正文字体大小		font-size_main
+	正文(小)字体大小	font-size_small
+	辅助文字字体大小	font-size_aux
+*/
+@define-mixin font-size_title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+@define-mixin font-size_subtitle {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+@define-mixin font-size_main {
+	font-size: 14px;
+}
+
+@define-mixin font-size_small {
+	font-size: 12px;
+}
+
+@define-mixin font-size_aux {
+	font-size: 12px;
+}
+
+/*
+	字体颜色
+	----------------------------
+	主要文字	 	font-color_main
+	次级文字	 	font-color_sub
+	辅助性文字	 	font-color_aux
+	hover文字	 	font-color_hover
+	提示框文字		font-color_tooltip
+	禁用状态文字	font-color_disabled
+	反选状态文字	font-color_reverse
+*/
+@define-mixin font-color_main {
+	color: #1F2D3D;
+}
+
+@define-mixin font-color_sub {
+	color: #475669;
+}
+
+@define-mixin font-color_aux {
+	color: #5E6D82;
+}
+
+@define-mixin font-color_hover {
+	color: #8492A6;
+}
+
+@define-mixin font-color_tooltip {
+	color: #B1BDDD;
+}
+
+@define-mixin font-color_disabled {
+	color: #C3C9D3;
+}
+
+@define-mixin font-color_reverse {
+	color: #FFFFFF;
+}

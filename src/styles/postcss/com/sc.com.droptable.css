@@ -1,0 +1,7 @@
+@component-namespace sc {
+    @b drop-table {
+        padding:0;
+        height:auto;
+		margin-top: -6px;
+    }
+}

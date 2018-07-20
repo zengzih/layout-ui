@@ -1,0 +1,173 @@
+@import "../common/sc.var.css";
+@import "../mixins/sc.mixins.util.css";
+@import "../layout/sc.layout.rowcol.css";
+
+@component-namespace sc {
+  @b content {
+  @mixin container;
+  }
+}
+
+/* 后台导航框架 ···
+--------------------------
+  header : 固定在页面顶部
+  sidebar : 侧边栏
+  content : 中间主显区
+*/
+@component-namespace sc {
+  /* 容器 */
+  @b theme {
+    .datagrid-header, .datagrid-td-rownumber {
+    }
+    
+    .datagrid-header, .datagrid-td-rownumber {
+    }
+    .datagrid-htable{
+      border-top:1px solid #D5DBE2
+    }
+    .datagrid-header-row { /*设置thead的颜色*/
+      /*background: #DFE3F4;*/
+      background: #E9EBF1;
+      box-shadow: 0 -1px 0 0 #E7EEF9;
+      font-size:12px;
+      height:40px;
+      font-family: 微软雅黑;
+      font-weight: normal;
+      color: #4c4c4c;
+      td{
+        .datagrid-cell{
+          font-family: "微软雅黑";
+          font-size: 12px;
+          word-break: break-all;
+          line-height: 18px;
+          color: #353535;
+          letter-spacing: -0.07px;
+          font-weight: bold;
+          padding:0 5px;
+          white-space:inherit;
+        }
+      }
+      #sort{
+        .datagrid-sort-icon{
+          position: relative;
+          display:inline-block;
+          width: 16px;
+          height: 30px;
+          margin-left: 5px;
+          margin-top: -2px;
+          vertical-align: middle;
+            .sort-caret{
+              display: inline-block;
+              width: 0;
+              height: 0;
+              border: 0;
+              content: "";
+              position: absolute;
+              left: 3px;
+              z-index: 2;
+            }
+            .sort-caret.ascending{
+              top: 9px;
+              border-top: none;
+              border-right: 5px solid transparent;
+              border-bottom: 5px solid rgb(151, 153, 190);
+              border-left: 5px solid transparent;
+            }
+            .sort-caret.descending{
+              bottom: 9px;
+              border-top: 5px solid rgb(151, 153, 190);
+              border-right: 5px solid transparent;
+              border-bottom: none;
+              border-left: 5px solid transparent;
+            }
+         }
+      }
+    }
+    
+    .datagrid-header-row { /*设置thead的字体颜色 大小*/
+        border-top:1px solid #D5DBE2;
+      td{
+        color: #000;
+        font-size: 14px;
+        font-family: "微软雅黑";
+      }
+      td:first-child{
+        border-left:1px solid #D5DBE2;
+      }
+      .datagrid-cell{
+       /* word-break: break-all;*/
+        /*box-sizing: border-box;*/
+      }
+      td:last-child{
+        div.datagrid-cell-group{
+          width: 100px!important;
+        }
+      }
+      #datagrid-cell-sort-asc .sort-caret.ascending{
+        border-bottom-color: rgb(72, 75, 106)!important;
+      }
+      #datagrid-cell-sort-desc .sort-caret.descending{
+        border-top-color: rgb(72, 75, 106)!important;
+      }
+    }
+    
+    .datagrid-row-over { /*当前tr hover效果*/
+      background: #F2F6FF !important;
+      border: 1px solid#cde0ff !important;
+      border-bottom: 1px solid#cde0ff !important;
+    }
+    
+    .datagrid-btable {
+      background: #fff;
+      .datagrid-row{
+        height:40px;
+        td:last-child>div{
+          min-width: 120px;
+          span{
+            cursor: pointer;
+            margin-right: 8px;
+          }
+          .tree-folder{
+            width: 20px;
+            overflow: inherit;
+          }
+        }
+        td:first-child{
+          border-left:1px solid #D5DBE2;
+        }
+        td{
+          .datagrid-editable-input{
+            width: 85%!important;
+           }
+         }
+       }
+
+      .datagrid-cell{
+        font-family: "微软雅黑";
+        font-size: 12px;
+        color: #353535;
+        letter-spacing: -0.07px;
+        padding:0 5px;
+        word-break: break-all;
+        white-space:inherit;
+        /*box-sizing: border-box;*/
+      }
+      .datagrid-row-selected{
+         background: none;
+      }
+      .treegrid-tr-tree>td{
+        padding:0!important;
+      }
+    }
+
+    .datagrid-row-alt {
+      background: #F8F9FA;;
+    }
+    
+    .datagrid-header td, .datagrid-body td, .datagrid-footer td { /*表格border*/
+      border-right:1px solid #D5DBE2;
+      border-bottom:1px solid #D5DBE2;
+    }
+    
+  }
+}

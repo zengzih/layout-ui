@@ -1,0 +1,9 @@
+@component-namespace sc {
+    @b drop-tree {
+        padding:0;
+        height:auto;
+        .el-tree{
+            border:none;
+        }
+    }
+}

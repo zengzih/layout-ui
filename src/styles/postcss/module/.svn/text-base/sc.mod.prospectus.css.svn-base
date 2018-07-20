@@ -1,0 +1,208 @@
+@import "../common/sc.var.css";
+@import "../mixins/sc.mixins.util.css";
+
+
+@component-namespace sc {
+	@b prospectus {
+		overflow: hidden;
+		font-family: MicrosoftYaHei;
+		font-size: 14px;
+		color: #131A35;
+		letter-spacing: -0.07px;
+		/* 任务日历 */
+		@m taskdate {
+			background: #FFFFFF;
+			border: 1px solid #C3C9D3;
+			padding: 40px;
+			min-height: 200px;
+			.sc-body {
+				width: 980px;
+				margin: 0 auto;
+			}
+			table {
+				tr {
+					&+tr {
+						td {
+							padding-top:10px;
+						}
+					}
+					td {
+						overflow: hidden;
+						&+td {
+							padding-left: 50px;
+						}
+						&:nth-child(2) {
+							padding-left: 30px;
+						}
+						&.status {
+							color: #B1BDDD;
+						}
+
+						.vline {
+							height: 30px;
+							width: 2px;
+							display: inline-block;
+							background: #B1BDDD;
+							border-radius: 1px;
+						}
+					}
+					@when active {
+						td.status {
+							color: #5B7BFA;
+						}
+						.vline {
+							background: #5B7BFA;
+						}
+					}
+				}
+			}
+		}
+		/* 进行中与已完成列表 */
+		@m list {
+			.sc-header {
+				span {
+					display: inline-block;
+					background: #E9EAED;
+					color: #353535;
+					border: 1px solid #C3C9D3;
+					min-width: 100px;
+					height: 37px;
+					line-height: 37px;
+					text-align: center;
+					border-bottom:0;
+					cursor: pointer;
+					&+span {
+						margin-left: 6px;
+					}
+					@when active {
+						background: #5974E3;
+						color: #fff;
+					}
+				}
+			}
+			.sc-body {
+				background: #FFFFFF;
+				border: 1px solid #C3C9D3;
+				padding: 20px 90px;
+				min-height: 200px;
+
+				.sc-card {
+					background: #FFFFFF;
+					border: 1px solid #979797;
+					padding: 47px 59px;
+					position: relative;
+					&+.sc-card {
+						margin-top: 10px;
+					}
+					p+p {
+						margin-top: 25px;
+					}
+					.close{
+						cursor:pointer;
+						position:absolute;
+						right:20px;
+						top:20px;
+					}
+				}
+
+				@when completed {
+
+				}
+			}
+		}
+
+		/* 详情 */
+		@m detail {
+			.sc-header {
+				background: #FFFFFF;
+				border: 1px solid #C3C9D3;
+				padding: 15px 90px;
+			}
+			.sc-body {
+				background: #FFFFFF;
+				border: 1px solid #C3C9D3;
+				padding: 65px 90px;
+				margin-top: 15px;
+
+				.sc-card {
+					background: #FFFFFF;
+					border: 1px solid #979797;
+					padding: 47px 59px;
+
+					&+.sc-card {
+						margin-top:15px;
+					}
+
+					p+p {
+						margin-top: 25px;
+					}
+				}
+			}
+		}
+		/* 编辑 */
+		@m edit {
+			padding: 25px 10px;
+			.sc-header {
+				text-align: center;
+				h3 {
+					font-size: 14px;
+					color: #131A35;
+					font-weight: bold;
+				}
+				p {
+					font-size: 14px;
+					color: #4D4F61;
+					margin-top: 15px;
+				}
+			}
+			.sc-body {
+				margin-top: 18px;
+				.sc-list {
+					border: 1px solid #C3C9D3;
+					border-radius: 2px;
+				}
+				.sc-card {
+					height: 46px;
+					line-height: 46px;
+					padding: 0 20px;
+					color: #4D4F61;
+					.sc-btn {
+						display: inline-block;
+						width: 72px;
+						height: 24px;
+						line-height: 24px;
+						border-radius: 2px;
+						text-align: center;
+
+						@when blue {
+							border: 1px solid #5B7BFA;
+							color: #5B7BFA;
+						}
+
+						@when grey {
+							border: 1px solid #C3C9D3;
+							color: #C3C9D3;
+						}
+
+						@when yellow {
+							border: 1px solid #FFB400;
+							color: #FFB400;
+						}
+
+						@when green {
+							border: 1px solid #18DDB1;
+							color: #18DDB1;
+						}
+					}
+					&+.sc-card {
+						border-top: 1px solid #C3C9D3;
+					}
+
+					@when over {
+						background: #F6F8FB;
+					}
+				}
+			}
+		}
+	}
+}

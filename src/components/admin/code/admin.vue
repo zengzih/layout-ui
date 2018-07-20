@@ -1,0 +1,968 @@
+<template>
+  <div class="sc-admin" :class="{'is-toggle': !siderIsToggled}">
+    <div class="sc-admin__header" v-if="showMenu"> <!--  @contextmenu="showSubMenu = false"-->
+      <div class="sc-admin__header__hd" :class="{' classic': menuTheme !== 'default' }">
+        <img class="sc-logo" :src="logo.normal||''">
+        <img class="sc-logo--mini" :src="logo.mini||''">
+      </div>
+      <div class="sc-admin__header__bd" :class="{' classic': menuTheme !== 'default' }" v-if="type==1" ref="headerBd">
+        <div class="sc-tabs" :class="tabsClassObj" tabIndex="1003" @click="showContextMenu=false">
+          <div class="sc-tabs__navleft" @click="navLeft()"><i class="iconfont sc-icon-last-page"></i></div>
+          <div class="sc-tabs__body" ref="tabs1">
+            <ul class="sc-tabs__wrapper" ref="tabsWrapper1" :style="{left:tabsWrapperLeft+'px'}">
+              <li class="sc-tab" v-for="(tab, tabIdx) in tabs" @click="navTab(tabIdx, tab)"
+                  @mousedown="handleTabContext(tab, $event)"
+                  :class="{'is-active': tab.active, 'has-close':tabIdx>0}" v-if="tab.url">
+                <a href="javascript:void(0);" @focus="handleTabsFocus" @blur="handleTabsBlur">
+                  <span class="label">{{tab.label}}</span>
+                  <span class="close icon iconfont sc-icon-tab-close" @click.stop="closeTab(tabIdx)"
+                        v-if="tabIdx>0"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="sc-tabs__navright" @click="navRight()"><i class="iconfont sc-icon-next-page"></i></div>
+        </div>
+      </div>
+
+      <div class="sc-admin__header__bd" v-if="type==2">
+      </div>
+
+      <div class="sc-admin__header__ft" ref="headerFt">
+        <div class="sc-notification">
+          <div class="sc-notification__item" @click="$emit('msg-click', msg.id)" v-for="(msg, k) in msgNotifs">
+            <i class="iconfont shake" :id="'scMsgbell'+msg.id" :class="`sc-icon-${msg.icon}`"
+               :style="{color:msg.bellColor}"></i>
+            <span v-if="msg.num" class="sc-badge">{{msg.num}}</span>
+          </div>
+        </div>
+        <div class="sc-usermenu" :class="{'is-active': userDropmenuActive}">
+          <a href="javascript:void(0);" @click="userDropmenuActive=!userDropmenuActive" tabIndex="1001"
+             @blur="handleUserMenuBlur">
+            {{dropMenuItems.username}}
+            <i class="iconfont sc-icon-more-expansion1" v-if="!userDropmenuActive"></i>
+            <i class="iconfont sc-icon-more-fold" v-if="userDropmenuActive"></i>
+          </a>
+          <transition name="el-zoom-in-top">
+            <div class="sc-dropmenu">
+              <div class="sc-arrowtop"></div>
+              <div class="sc-dropmenu__hd">
+                {{dropMenuItems.title}}
+              </div>
+              <ul>
+                <li v-for="item in dropMenuItems.items" @click="handleDropMenuItemClick(item.id)"><a><i class="iconfont"
+                                                                                                        :class="`sc-icon-${ item.icon }`"></i><span>{{item.label}}</span></a>
+                </li>
+              </ul>
+            </div>
+          </transition>
+        </div>
+      </div>
+    </div>
+    <div class="sc-admin__sider" :class="{' classic': menuTheme !== 'default' }" v-if="showMenu" ref="menuWrap">
+      <div class="sc-admin__sider__bd" :class="{' classic': menuTheme !== 'default' }" ref="navMenuWrapper">
+        <div class="btn-toggle sc-navmenu__navhead" href="javascript:void(0)">
+          <div class="icon">
+            <i class="iconfont sc-icon-expansion-new" v-if="!siderIsToggled" @click="toggleSider()"></i>
+            <i class="iconfont sc-icon-fold-new" v-else @click="toggleSider()"></i>
+            <i class="iconfont sc-icon-search2 search" v-if="siderIsToggled" @click="isShowSearch"></i>
+            <i class="iconfont sc-icon-xitongshezhi setup" v-if="siderIsToggled" @click="setUp()"></i>
+          </div>
+          <div class="search-box" :class="{'classic': menuTheme !== 'default' }" v-if="searchBox">
+            <input type="text" placeholder="搜索" v-model="menuSearchVal">
+          </div>
+        </div>
+        <div class="sc-navmenu" ref="navMenu" v-if="menuTheme === 'default'">
+          <ul class="sc-navmenu__wrapper" :style="{top:navMenuWrappTop+'px'}" ref="navMenuBody" tabIndex="1002"
+              @blur="handleNavmenuItemBlur">
+            <li class="sc-navmenu__item" v-for="(item, ridx) in menuData" :class="{'is-active': item.active}"
+                @click="tapNavItem(ridx,$event)" ref="firstMenu">
+              <div class="sc-navmenu_body">
+                <ul class="sc-navmenu--sub" v-if="item.children" v-show="showSubMenu" :style="{left:secMenuPos+'px'}">
+                  <li class="sc-navmenu--sub__item" @click.stop="navTo(ridx, sidx)"
+                      v-for="(sitem, sidx) in item.children"
+                      :class="{'is-active': sitem.active, 'has-child': sitem.children}"
+                      @mouseover="scdMenuOver(sitem)" @mouseout="scdMenuOut(sitem)"
+                  >
+                    <span class="label">{{sitem.label}}</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="sc-navmenu_header">
+                <i class="iconfont" :class="`sc-icon-${ item.icon }`" :title="item.label"></i>
+                <span class="label">{{item.label}}</span>
+              </div>
+            </li>
+            <!-- 三级菜单 -->
+            <li @contextmenu="handleThirdMenu">
+              <div class="sc-navmenu--third" :style="{'left': thirdMenuPos}" v-show="showThirdMenu"
+                   @mouseover="thiirdMenuOver" @mouseout="thiirdMenuOue">
+                <ul>
+                  <li class="sc-navmenu--third__item" v-for="(item,index) in thiirdMenuData" @click="togglePage(item)">
+                    <span class="label">{{item.label}}</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <easy-scrollbar v-else ref="scrollbar" :bar-option="opt">
+             <div class="menu_wrapper">
+               <tree-node
+                 :data="menuData"
+                 :accordion="accordion"
+                 @menu-click="togglePage"
+                 @node-click="handlerNodeClick"
+                 :default-props="defaultProps"
+                 :self="this"
+                 :default-expanded-keys="defaultExpandedKeys"
+                 ref="treeNode">
+               </tree-node>
+               <el-tooltip effect='light' placement="top" ref="tooltip" content='测试'></el-tooltip>
+             </div>
+           </easy-scrollbar>
+
+
+
+        <div class="sc-navmenu__navbot" v-if="menuTheme === 'default'">
+          <span class="iconfont sc-icon-last-page1" v-show="navMenuBtn.up" @click="menuNavUp()"></span>
+          <span class="iconfont sc-icon-next-page1" v-show="navMenuBtn.down" @click="menuNavDown()"></span>
+        </div>
+      </div>
+      <div class="sc-admin__sider__ft"></div>
+    </div>
+
+    <div class="sc-admin__content">
+      <div class="sc-admin__content__hd" v-if="type==2">
+        <div class="sc-tabs" :class="tabsClassObj" tabIndex="1004" @blur="handleTabsBlur"
+             @click="showContextMenu=false">
+          <div class="sc-tabs__navleft" @click="navLeft()"><i class="iconfont sc-icon-last-page"></i></div>
+          <div class="sc-tabs__body" ref="tabs2">
+            <ul class="sc-tabs__wrapper" ref="tabsWrapper2" :style="{left:tabsWrapperLeft+'px'}">
+              <li class="sc-tab" v-for="(tab, tabIdx) in tabs" @click="navTab(tabIdx, tab)"
+                  @mousedown="handleTabContext(tab, $event)"
+                  :class="{'is-active': tab.active, 'has-close':tabIdx>0}" v-if="tab.url">
+                <a href="javascript:void(0);" @focus="handleTabsFocus" @blur="handleTabsBlur">
+                  <span class="label">{{tab.label}}</span>
+                  <span class="close iconfont sc-icon-close" @click.stop="closeTab(tabIdx)" v-if="tabIdx>0"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="sc-tabs__navright" @click="navRight()"><i class="iconfont sc-icon-next-page"></i></div>
+        </div>
+      </div>
+
+      <div class="sc-admin__content__bd" ref="adminContent" :class="{ 'no_menu': !showMenu, 'classic': menuTheme !== 'default'}">
+        <div v-for="(tab, tabIdx) in tabs" v-show="tab.active" style="height:100%;">
+          <div v-if="tab.mode=='url'" style="height:100%;overflow:hidden;">
+            <iframe v-if="tab.url" :src="tab.url" :id="'tabIframe'+tabIdx"></iframe>
+          </div>
+          <div v-if="tab.mode=='template'" style="height:100%;overflow:auto;" v-html="tab.template">
+          </div>
+          <div v-if="tab.mode=='render'" style="height:100%;overflow:auto;" v-html="tab.render()">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 右键菜单 -->
+    <div class="sc-contextmenu" :style="{left:tabContextMenuX+'px', top:tabContextMenuY+'px'}" v-show="showContextMenu">
+      <ul class="sc-contextmenu__list">
+        <li class="sc-contextmenu__item" @click="tabRefresh">刷新</li>
+        <li class="sc-contextmenu__item" v-if="hasContextMenuClose" @click="tabClose">关闭</li>
+        <li class="sc-contextmenu__item" @click="tabCloseAll">关闭所有</li>
+        <li class="sc-contextmenu__item" @click="tabCloseOthers">关闭其他</li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+  var navMenuDom = null
+  var navMenuHeight = 0
+  var navMenuWrapperDom = null
+  var navMenuWrapperHeight = 0
+
+  var tabsDom = null
+  var tabsWidth = 0
+  var tabsWrapperDom = null
+  var tabsWrapperWidth = 0
+
+  $(window).resize(function (e) {
+    navMenuHeight = $(navMenuWrapperDom).height() - $('.sc-navmenu__navbot').height() - $('.sc-navmenu__navhead').height()
+    navMenuWrapperHeight = $(navMenuDom).height()
+
+    tabsWidth = $(tabsDom).width()
+  })
+  import { Node } from './node'
+  import TreeNode from './tree-node'
+  import EasyScrollbar from '../../easy-scrollbar'
+
+  export default {
+    data () {
+      return {
+        tabsWrapperWidth: 1200,
+        tabsWrapperLeft: 0,
+        navMenuWrappTop: 0,
+        userDropmenuActive: false,
+        tabs: [],
+        tabIndex: 0,
+        showSubMenu: true,
+        showContextMenu: false,
+        tabContextMenuX: 0,
+        tabContextMenuY: 0,
+        curContextMenuTab: null,
+        hasContextMenuClose: false,
+        disTabNavLeft: true,
+        disTabNavRight: true,
+        siderIsToggled: this.siderToggled,
+        navMenuBtn: {
+          up: true,
+          down: true
+        },
+        isIE: false,
+        sedMenuWidth: '',
+        showThirdMenu: false,
+        thiirdMenuData: [],
+        timeoutName: '',
+        secMenuPos: '',
+        menuSearchVal: '',
+        searchBox: false,
+        // 是否展开
+        checked: this.foldStates,
+        opt: {
+          barColor: 'rgb(233, 236, 242)',   // 滚动条颜色
+          barWidth: 6,           // 滚动条宽度
+          railColor: '#eee',     // 导轨颜色
+          barMarginRight: 0,     // 垂直滚动条距离整个容器右侧距离单位（px）
+          barMaginBottom: 0,     // 水平滚动条距离底部距离单位（px)
+          barOpacityMin: 0.2,      // 滚动条非激活状态下的透明度
+          zIndex: 'auto',        // 滚动条z-Index
+          autohidemode: true,     // 自动隐藏模式
+          horizrailenabled: true // 是否显示水平滚动条
+        }
+      }
+    },
+    props: {
+      // 是否勾选复选框
+      foldStates: {
+        type: Boolean,
+        default: false
+      },
+
+      type: {
+        type: String,
+        default: '1'
+      },
+      siderToggled: {
+        type: Boolean,
+        default: true
+      },
+      navMenuItems: Array,
+      dropMenuItems: Object,
+      msgNotifs: Array,
+      logo: {
+        type: Object,
+        default: function () {
+          return {
+            normal: '/static/img/logo.png',
+            mini: '/static/img/logo_mini.png'
+          }
+        }
+      },
+      showMenu: {
+        type: Boolean,
+        default: false
+      },
+      // menuTheme: {
+      //   type: String,
+      //   default: 'default' // default: 默认  Classic: 经典
+      // },
+      menuTheme: String,
+      accordion: {
+        type: Boolean,
+        default: true
+      },
+      defaultExpandedKeys: {
+        type: Array,
+        default () {
+          return []
+        }
+      },
+      defaultProps: {
+        type: Object,
+        default () {
+          return {
+            nodeKey: 'id'
+          }
+        }
+      }
+    },
+    components: {
+      TreeNode,
+      EasyScrollbar
+    },
+    computed: {
+      tabsClassObj () {
+      },
+      thirdMenuPos () {
+        return this.secMenuPos + this.sedMenuWidth + 'px'
+      },
+      menuData () {
+        let arr = []
+        let _this = this
+        if (_this.menuSearchVal === '') {
+          return _this.navMenuItems
+        }
+
+        function filterData (data) {
+          for (var i = 0; i < data.length; i++) {
+            if (!data[i].children && data[i].label.indexOf(_this.menuSearchVal) >= 0) {
+              arr.push(data[i])
+            } else {
+              if (data[i].children) {
+                filterData(data[i].children)
+              }
+            }
+          }
+        }
+        filterData(_this.navMenuItems)
+        //  去重
+        var resullt_url = []
+        var resultArr = []
+        arr.forEach(function (item) {
+          if (resullt_url.indexOf(item.url) === -1) {
+            resullt_url.push(item.url)
+            resultArr.push(item)
+          }
+        })
+        return resultArr
+      }
+    },
+    watch: {
+      defaultExpandedKeys (val) {
+        if (this.siderToggled) {
+          this.$refs.treeNode && this.$refs.treeNode.setNodeExpand(val)
+        }
+      },
+      siderToggled(val) {
+        this.siderIsToggled = val
+      }
+    },
+    methods: {
+      // 获取当前复选框的状态
+      isFoldChange (event) {
+        this.$emit('fold-change', event.target.checked)
+      },
+      handleThirdMenu () {
+        this.$refs.navMenuBody.focus()
+      },
+      setUp () {
+        this.$emit('set-up')
+      },
+      isShowSearch () {
+        this.searchBox = !this.searchBox
+      },
+      // 二级菜单hover事件
+      scdMenuOver (sitem) {
+        if (sitem.children) {
+          clearTimeout(this.timeoutName)
+
+          this.thiirdMenuData = sitem.children
+          this.showThirdMenu = true
+        }
+      },
+      scdMenuOut (sitem) {
+        let _this = this
+        if (sitem.children) {
+          clearTimeout(this.timeoutName)
+          this.timeoutName = setTimeout(function () {
+            _this.showThirdMenu = false
+          }, 200)
+        }
+
+      },
+      // 三级菜单的hover事件
+      thiirdMenuOver () {
+        clearTimeout(this.timeoutName)
+        this.showThirdMenu = true
+      },
+      thiirdMenuOue () {
+        let _this = this
+        this.timeoutName = setTimeout(function () {
+          _this.showThirdMenu = false
+        }, 200)
+      },
+      // 三级菜单点击
+      togglePage (item) {
+        for (var i in this.tabs) {
+          if (this.tabs[i].id === item.id) {
+            this.tabs[i].active = true
+            this.showThirdMenu = false
+            this.showSubMenu = false
+          } else {
+            this.tabs[i].active = false
+          }
+        }
+
+        if (!item.children && (item.url || item.template || item.render)) {
+          let idx = this.tabsHasNode(item.id)
+
+          if (idx !== -1) {
+            this.tabs.forEach((tab, i) => {
+              if (tab.id === item.id) {
+                if (tab.url == '') {
+                  tab.url = item.url
+                  this.navTab(idx)
+                }
+              }
+            })
+            return
+          }
+
+          if (item.url) {
+            this.tabs.push({id: item.id, label: item.label, mode: 'url', url: item.url})
+            this.navTab(this.tabs.length - 1)
+          } else if (item.template) {
+            this.tabs.push({id: item.id, label: item.label, mode: 'template', template: item.template})
+            this.navTab(this.tabs.length - 1)
+          } else if (item.render) {
+            this.tabs.push({id: item.id, label: item.label, mode: 'render', render: item.render})
+            this.navTab(this.tabs.length - 1)
+          } else {
+
+          }
+          this.showThirdMenu = false
+
+          this.$nextTick(function () {
+            this.navRight() // 新添加tab自动将tab容器调整位置
+          })
+        }
+      },
+      // 左侧滚轮事件
+      scrollto () {
+        var cando = true
+        var vm = this
+        $('.sc-navmenu_header').ready(function () {
+          setTimeout(function () {
+            var header = $('.sc-navmenu_header')
+            for (var i = 0; i < header.length; i++) {
+              if (typeof header[i].onmousewheel != 'undefined') {
+                header[i].onmousewheel = function (e) {
+                  if (!cando) return
+                  if (e.wheelDelta < 0) {
+                    vm.menuNavDown()
+                  } else {
+                    vm.menuNavUp()
+                  }
+                }
+              } else if (document.addEventListener) {
+                header[i].addEventListener('DOMMouseScroll', function (e) {
+                  if (!cando) return
+                  if (e.detail > 0) {
+                    vm.menuNavDown()
+                  } else {
+                    vm.menuNavUp()
+                  }
+                }, false)
+              }
+              cando = true
+            }
+          }, 100)
+        })
+      },
+      // 通知图标抖动
+      shake (id) {
+        $('#scMsgbell' + id).addClass('shake-vertical')
+      },
+      // 停止知抖动
+      stopShake (id) {
+        $('#scMsgbell' + id).removeClass('shake-vertical')
+      },
+      // 刷新当前tab
+      tabRefresh () {
+        if (this.curContextMenuTab == null) return
+        var index = this.tabs.indexOf(this.curContextMenuTab)
+
+        window.document.getElementById('tabIframe' + index).contentWindow.location.reload(true)
+      },
+      // 关闭当前tab
+      tabClose () {
+        if (this.curContextMenuTab == null) return
+        var index = this.tabs.indexOf(this.curContextMenuTab)
+
+        this.closeTab(index)
+      },
+      // 关闭除首页外所有tab
+      tabCloseAll () {
+        if (this.curContextMenuTab == null) return
+        this.tabs.forEach(function (tab, index) {
+          if (index != 0) tab.url = ''
+        })
+
+        if (this.tabs[0] && !this.tabs[0].active) {
+          this.tabs[0].active = true
+        }
+      },
+      // 关闭除首页和当前之外所有tab
+      tabCloseOthers () {
+        if (this.curContextMenuTab == null) return
+        var index = this.tabs.indexOf(this.curContextMenuTab)
+        if (this.tabs.length > 2 && index < this.tabs.length - 1) {
+          this.tabs.splice(index + 1)
+        }
+
+        if (index > 1) {
+          for (var i = 1; i < index; i++) {
+            this.tabs[i].url = ''
+          }
+        }
+
+        this.curContextMenuTab.active = true
+      },
+      handleTabsFocus () {
+        // console.log('获取焦点')
+      },
+      // tabs失去焦点后关闭右键菜单
+      handleTabsBlur () {
+        var _this = this
+        setTimeout(function () {
+          _this.showContextMenu = false
+        }, 200)
+      },
+      // 显示右键菜单
+      handleTabContext (tab, e) {
+        if (e.button == 2) {
+          this.tabContextMenuX = e.clientX
+          this.tabContextMenuY = e.clientY
+
+          this.curContextMenuTab = tab
+
+          var index = this.tabs.indexOf(tab)
+          if (index == 0) {
+            this.hasContextMenuClose = false
+          } else {
+            this.hasContextMenuClose = true
+          }
+
+          this.showContextMenu = true
+
+          this.$emit('tab-contextmenu', tab, e)
+        }
+      },
+      // 左侧导航子菜单失去焦点后关闭
+      handleNavmenuItemBlur (item) {
+        var _this = this
+        setTimeout(function () {
+          if (!_this.showThirdMenu) {
+            _this.showSubMenu = false
+          }
+        }, 200)
+      },
+      // 右上角管理员drop菜单失去焦点后关闭
+      handleUserMenuBlur () {
+        //console.log('失去焦点')
+        var _this = this
+        setTimeout(function () {
+          _this.userDropmenuActive = false
+        }, 200)
+      },
+      // 右上角管理drop菜单弹出
+      handleDropMenuItemClick (id) {
+        this.userDropmenuActive = false
+        this.$emit('dropmenu-change', id)
+      },
+      // 根据导航菜单数据索引返回导航节点
+      navNode (ridx, sidx, tidx) {
+        if (typeof sidx === 'undefined') {
+          return this.menuData[ridx]
+        } else if (typeof tidx === 'undefined') {
+          return this.menuData[ridx].children[sidx]
+        } else {
+          return this.menuData[ridx].children[sidx].children[tidx]
+        }
+      },
+      // 通过tab id获取tab 索引
+      tabsHasNode (id) {
+        let tabs = this.tabs
+
+        for (var i = 0; i < tabs.length; i++) {
+          if (tabs[i].id == id) {
+            return i
+          }
+        }
+
+        return -1
+      },
+      // 外部调用方法往tabs新增tab
+      tabsAppend (tab, callback) { // 开放方法：手动添加tab页
+        if (!tab || !tab.url) {
+          console.error('tab.url 未定义')
+          return
+        }
+
+        var tabIdx = this.tabsHasNode(tab.id || 'newtab')
+        if (tabIdx !== -1) {
+          this.tabs.forEach((ntab, i) => {
+            if (ntab.id === tab.id) {
+              if (ntab.url == '') {
+                ntab.url = tab.url
+              }
+              if (tab.reload) {
+                ntab.url = ''
+                this.$nextTick(() => {
+                  ntab.url = tab.url
+                  this.navTab(tabIdx)
+                })
+              }
+              !tab.reload && this.navTab(tabIdx)
+            }
+          })
+        } else {
+          this.tabs.push({id: tab.id || 'newtab', label: tab.label || '自定义', mode: 'url', url: tab.url})
+          this.navTab(this.tabs.length - 1)
+        }
+        if (callback != undefined) {
+          callback & callback(tab)
+        }
+      },
+      // 左侧导航菜单一级菜单点击处理
+      tapNavItem (ridx, e) {
+        this.navTo(ridx)
+
+        let navItems = this.menuData
+
+        if (navItems[ridx].active) {
+          this.showSubMenu = !this.showSubMenu
+          this.$set(navItems[ridx], 'active', this.showSubMenu)
+          return
+        }
+
+        this.showSubMenu = true
+
+        for (var i = 0; i < navItems.length; i++) {
+          this.$set(navItems[i], 'active', false)
+        }
+        this.$set(navItems[ridx], 'active', true)
+
+        // 计算二级菜单的位置
+        if (this.secMenuPos === '') {
+          this.secMenuPos = this.$refs.menuWrap.offsetWidth
+        }
+
+        // 获取二级菜单的宽，为三级菜单计算位置
+        if (this.showSubMenu && navItems[ridx].children) {
+          this.$nextTick(function () {
+            this.sedMenuWidth = this.$refs.firstMenu[ridx].getElementsByClassName('sc-navmenu--sub')[0].offsetWidth
+          })
+        }
+      },
+      // 左侧导航菜单二级菜单点击处理
+      navTo (ridx, sidx, tidx) {
+        let _this = this
+        let navNode = this.navNode(ridx, sidx, tidx)
+        if (!navNode.children && (navNode.url || navNode.template || navNode.render)) {
+          let idx = this.tabsHasNode(navNode.id)
+
+          if (idx !== -1) {
+            for (var i in this.tabs) {
+              var tab = this.tabs[i]
+              if (tab.id === navNode.id) {
+                if (tab.url == '') {
+                  _this.tabs.splice(i, 1)
+                  _this.tabs.push({id: navNode.id, label: navNode.label, mode: 'url', url: navNode.url})
+                  return _this.navTab(_this.tabs.length - 1)
+
+                }
+                return _this.navTab(idx)
+              }
+            }
+          }
+
+          if (navNode.url) {
+            this.tabs.push({id: navNode.id, label: navNode.label, mode: 'url', url: navNode.url})
+            this.navTab(this.tabs.length - 1)
+          } else if (navNode.template) {
+            this.tabs.push({id: navNode.id, label: navNode.label, mode: 'template', template: navNode.template})
+            this.navTab(this.tabs.length - 1)
+          } else if (navNode.render) {
+            this.tabs.push({id: navNode.id, label: navNode.label, mode: 'render', render: navNode.render})
+            this.navTab(this.tabs.length - 1)
+          } else {
+
+          }
+
+          this.$nextTick(function () {
+            this.navRight() // 新添加tab自动将tab容器调整位置
+          })
+        }
+      },
+      // 根据tab索引滑动到指定tab
+      slideToTab (idx) {
+        var tabOffset = 0
+        var tabWidth = 0
+        $(tabsWrapperDom).children().each(function (i, dom) {
+          if (i < idx) {
+            tabOffset += $(this).width()
+          } else if (i == idx) {
+            tabWidth = $(this).width()
+          }
+        })
+
+        var minOffset = tabOffset + tabWidth - tabsWidth
+        if (minOffset > 0 && this.tabsWrapperLeft > -minOffset) {
+          this.tabsWrapperLeft = -(minOffset)
+        }
+
+        if (this.tabsWrapperLeft < -tabOffset) {
+          this.tabsWrapperLeft = -tabOffset
+        }
+      },
+      // 根据索引激活tab
+      navTab (tabIdx, tab) {
+        this.tabIndex = tabIdx
+        this.slideToTab(tabIdx)
+
+        let tabs = this.tabs
+
+        // 打开tab时，关闭子菜单
+        this.showSubMenu = false
+
+        if (tabs[tabIdx].active) return
+
+        for (var i = 0; i < tabs.length; i++) {
+          this.$set(tabs[i], 'active', false)
+        }
+        this.$set(tabs[tabIdx], 'active', true)
+        this.$refs.treeNode && this.$refs.treeNode.setMenuNode(tab)
+      },
+      // 根据tab索引关闭tab页面
+      closeTab (tabIdx) {
+        let tabs = this.tabs
+        let vm = this
+        let mbreak = false
+        if (tabs[tabIdx].active) {
+          if (tabIdx > 0) {
+            for (var i = tabIdx - 1; i > -1; i--) {
+              if (tabs[i].url && !mbreak) {
+                tabs[i].active = true
+                mbreak = true
+              }
+            }
+            this.tabIndex--
+          } else if (tabs.length > 1) {
+            tabs[1].active = true
+          }
+        }
+        tabs[tabIdx].url = ''
+        tabs[tabIdx].active = false
+        setTimeout(function () {
+          tabsWidth = $(tabsDom).width()
+          vm.navRight()
+          vm.slideToTab(vm.tabIndex)
+        })
+      },
+      updateTabSize () {
+        if ($(tabsWrapperDom).children().length) {
+          var tabsWrapperWidthComputed = 0
+
+          $(tabsWrapperDom).children().each(function () {
+            tabsWrapperWidthComputed += $(this).width()
+          })
+
+          tabsWrapperWidth = tabsWrapperWidthComputed + 1
+
+          this.tabsWrapperWidth = tabsWrapperWidth
+        }
+      },
+      updateTabNavStatus () {
+        if (this.tabsWrapperLeft >= 0) {
+          this.disTabNavLeft = true
+        } else {
+          this.disTabNavLeft = false
+        }
+
+        var maxOffset = tabsWrapperWidth - tabsWidth
+
+        if (this.tabsWrapperLeft <= -maxOffset) {
+          this.disTabNavRight = true
+        } else {
+          this.disTabNavRight = false
+        }
+
+        // console.log('更新tab状态')
+      },
+      navLeft () {
+        if (tabsWrapperWidth <= tabsWidth) {
+          this.tabsWrapperLeft = 0
+          this.disTabNavLeft = true
+          this.disTabNavRight = true
+          return
+        }
+
+        if (this.tabsWrapperLeft < -tabsWidth) {
+          this.tabsWrapperLeft += tabsWidth
+        } else {
+          this.tabsWrapperLeft = 0
+        }
+
+        this.updateTabNavStatus()
+      },
+      navRight () {
+        if (tabsWrapperWidth <= tabsWidth) {
+          this.tabsWrapperLeft = 0
+          this.disTabNavLeft = true
+          this.disTabNavRight = true
+          return
+        }
+        var maxOffset = tabsWrapperWidth - tabsWidth
+        var step = this.tabsWrapperLeft + maxOffset
+        if (step > navMenuHeight) {
+          this.tabsWrapperLeft -= tabsWidth
+        } else {
+          this.tabsWrapperLeft = -maxOffset
+        }
+
+        this.updateTabNavStatus()
+      },
+      updateMenuNavStatus () {
+        if (this.navMenuWrappTop >= 0) {
+          this.$set(this.navMenuBtn, 'up', false)
+        } else {
+          this.$set(this.navMenuBtn, 'up', true)
+        }
+
+        var maxOffset = navMenuWrapperHeight - navMenuHeight
+
+        if (this.navMenuWrappTop <= -maxOffset) {
+          this.$set(this.navMenuBtn, 'down', false)
+        } else {
+          this.$set(this.navMenuBtn, 'down', true)
+        }
+      },
+      menuNavUp () {
+        if (navMenuWrapperHeight <= navMenuHeight) {
+          this.navMenuWrappTop = 0
+          return
+        }
+
+        if (this.navMenuWrappTop < -navMenuHeight) {
+          this.navMenuWrappTop += navMenuHeight
+        } else {
+          this.navMenuWrappTop = 0
+        }
+
+        // this.updateMenuNavStatus()
+      },
+      menuNavDown () {
+        if (navMenuWrapperHeight <= navMenuHeight) {
+          this.navMenuWrappTop = 0
+          return
+        }
+        var maxOffset = navMenuWrapperHeight - navMenuHeight
+        var step = this.navMenuWrappTop + maxOffset
+        if (step > navMenuHeight) {
+          this.navMenuWrappTop -= navMenuHeight
+        } else {
+          this.navMenuWrappTop = -maxOffset
+        }
+
+        // this.updateMenuNavStatus()
+      },
+      hideSubMenu () {
+        this.showSubMenu = false
+      },
+      toggleSider () {
+        var vm = this
+        this.siderIsToggled = !this.siderIsToggled
+
+        setTimeout(function () {
+          tabsWidth = $(tabsDom).width()
+          vm.navRight()
+          vm.slideToTab(vm.tabIndex)
+        }, 300)
+
+        setTimeout(function () {
+          // 计算二级菜单的位置
+          vm.secMenuPos = vm.$refs.menuWrap.offsetWidth
+        }, 400)
+
+        // 收起搜索功能
+        if (this.siderIsToggled) {
+          this.searchBox = false
+          this.menuSearchVal = ''
+        }
+        if (this.siderIsToggled) { // 在展开菜单
+          this.$refs.treeNode && this.$refs.treeNode.setNodeExpand(this.defaultExpandedKeys)
+        } else {
+          this.$refs.treeNode && this.$refs.treeNode.menuToggle(this.siderIsToggled)
+        }
+        // this.handlerNodeClick();
+      },
+      handlerNodeClick () { // 菜单点击事件
+        /* const adminContent = this.$refs.adminContent
+        const adminSlier = this.$refs.menuWrap
+        setTimeout(() => {
+          console.log('----adminSlier-------')
+          console.log(adminSlier.offsetWidth)
+          adminContent.style.left = adminSlier.offsetWidth + 'px'
+        }, 100)*/
+      }
+    },
+    created () {
+    },
+    directives: {
+      focus: {
+        inserted: function (el, binding) {
+          if (binding.value) {
+            el.focus()
+          }
+        },
+        update: function (el, binding) {
+          if (binding.value) {
+            el.focus()
+          }
+        }
+      }
+    },
+    updated () {
+      this.updateTabSize()
+      this.updateTabNavStatus()
+
+      navMenuHeight = $(navMenuWrapperDom).height() - $('.sc-navmenu__navbot').height() - $('.sc-navmenu__navhead').height()
+      navMenuWrapperHeight = $(navMenuDom).height()
+    },
+    mounted () {
+      document.oncontextmenu = function (e) {
+        e.preventDefault()
+      }
+      /* if (tabsWrapperWidthComputed<100) {
+        tabsWrapperWidthComputed = 100 // 最小宽度限制
+      }*/
+      // this.updateMenuNavStatus()
+      setTimeout(() => {
+        navMenuDom = this.$refs.navMenuBody
+        navMenuWrapperDom = this.$refs.navMenuWrapper
+
+        tabsDom = this.type == 1 ? this.$refs.tabs1 : this.$refs.tabs2
+        tabsWrapperDom = this.type == 1 ? this.$refs.tabsWrapper1 : this.$refs.tabsWrapper2
+
+        navMenuHeight = $(navMenuWrapperDom).height() - $('.sc-navmenu__navbot').height() - $('.sc-navmenu__navhead').height()
+        navMenuWrapperHeight = $(navMenuDom).height()
+
+        tabsWidth = $(tabsDom).width()
+        if (tabsWrapperWidth > tabsWidth) {
+          this.disTabNavRight = false
+        }
+        this.scrollto()
+        this.updateTabSize()
+        const {headerBd, headerFt} = this.$refs
+        try {
+          headerBd.style.marginRight = headerFt.offsetWidth + 'px'
+        } catch (error) {
+        }
+      }, 400)
+    }
+  }
+</script>

@@ -1,0 +1,10 @@
+@charset "utf-8";
+@component-namespace sc {
+  /* 设置form表单的样式 */
+  @b stabdardize {
+    .el-dialog .el-dialog__title {
+      font-size: 14px;
+      padding: var(--admin-header-height);
+    }
+  }
+}

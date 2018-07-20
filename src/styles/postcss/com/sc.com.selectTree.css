@@ -1,0 +1,25 @@
+@import "../common/sc.var.css";
+@import "../../../theme/common/var.css";
+@import "../mixins/sc.mixins.util.css";
+@import "../common/sc.animate.css";
+
+@component-namespace sc {
+	@b theme {
+		.sc-select-tree {
+			.el-select__tags {
+				width:calc(100% - 35px);
+    			overflow: hidden;
+    			>span {
+    				display: inline-block;
+    				width: 100000000px;
+    			}
+			}
+			.el-tree {
+				border: none;
+			}
+		}
+		.sc-el-tree {
+			border:none!important;
+		}
+	}
+}

@@ -1,0 +1,137 @@
+@component-namespace sc {
+	@b layout-table {
+		@e row {
+			
+		}
+		
+		@e col {
+			&>.el-form-item {
+				@mixin flexbox;
+				margin: 0;
+				
+				height: 36px;
+				line-height: 36px;
+				
+				.el-form-item__label {
+					padding: 0 10px 0 0;
+					height: 36px;
+					position: relative;
+					top: 10px;
+					text-align: right;
+					word-wrap: break-word
+				}
+				
+				.el-form-item__content {
+					@mixin flexitem;
+					
+					.el-input, .el-select {
+						width: 100%;
+					}
+				}
+			}
+			
+			.sc-form-layout--icons {
+				.iconfont {
+					font-size: 25px;
+					cursor: pointer;
+					&+.iconfont {
+						margin-left: 10px;
+					}
+				}
+			}
+		}
+	}
+	
+	@b layout-label {
+		@m tiny {
+			.sc-layout-table__col {
+				@when offset-left {
+					.el-form-item {
+						margin-left: 60px;
+					}
+				}
+			}
+			
+			.el-form-item__label {
+				width: 60px;
+			}
+		}
+		@m small {
+			.sc-layout-table__col {
+				@when offset-left {
+					.el-form-item {
+						margin-left: 80px;
+					}
+				}
+			}
+			
+			.el-form-item__label {
+				width: 80px;
+			}
+		}
+		@m normal {
+			.sc-layout-table__col {
+				@when offset-left {
+					.el-form-item {
+						margin-left: 100px;
+					}
+				}
+			}
+			
+			.el-form-item__label {
+				width: 100px;
+			}
+		}
+		@m middle {
+			.sc-layout-table__col {
+				@when offset-left {
+					.el-form-item {
+						margin-left: 120px;
+					}
+				}
+			}
+			
+			.el-form-item__label {
+				width: 120px;
+			}
+		}
+		@m large {
+			.sc-layout-table__col {
+				@when offset-left {
+					.el-form-item {
+						margin-left: 160px;
+					}
+				}
+			}
+			
+			.el-form-item__label {
+				width: 160px;
+			}
+		}
+		@m hurge {
+			.sc-layout-table__col {
+				@when offset-left {
+					.el-form-item {
+						margin-left: 240px;
+					}
+				}
+			}
+			
+			.el-form-item__label {
+				width: 240px;
+			}
+		}
+	}
+	
+	.sc-layout-table__row {
+		&+.sc-layout-table__row {
+			&>.sc-layout-table__col {
+				padding-top: 20px;
+			}
+		}
+	}
+	
+	.sc-layout-table__col + .sc-layout-table__col {
+		padding-left: 20px;
+	}
+}

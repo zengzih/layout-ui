@@ -1,0 +1,61 @@
+@component-namespace sc {
+    /* 高级查询，只需要加.sc-advancedQuery的类就可以 */
+    @b ad-query {
+        .el-row:first-child {
+            padding:20px;
+            height: inherit !important;
+            margin: 0 !important;
+            & .el-form-item__content .el-input{
+                width:auto;
+            }
+            & .el-form-item__content .el-input__inner{
+               width: auto;
+            }
+            .el-form-item__content i.el-icon-search+input{
+                width:350px;
+            }
+            .el-col:nth-of-type(2) {
+                text-align: right;
+            }
+            .el-form-item {
+                margin-bottom: 0;
+            }
+            & .el-form-item:last-child{
+                margin-right: 0;
+            }
+        }
+        .el-row:nth-of-type(2) {
+            padding: 15px;
+            padding-bottom: 0;
+            border: 1px solid #ccc;
+            margin: 0 20px 10px 20px;
+            .el-col:nth-of-type(2) {
+                text-align: right;
+            }
+            /*.el-form-item__content {*/
+                /*width: calc(100% - 100px);*/
+                /*max-width: 217px;*/
+            /*}*/
+            /*.el-form-item__label {*/
+                /*min-width: 100px;*/
+            /*}*/
+            /*.el-form-item {*/
+                /*width: calc(25% - 15px);*/
+            /*}*/
+            & .el-form-item {
+                  margin-bottom: 15px;
+            }
+            & .el-form-item__content .el-input {
+                  width: 100%;
+            }
+            & .queryBtn.el-col {
+                  text-align: right;
+                  padding-top: 2px;
+            }
+        }
+        & .el-input__inner {
+            height: 32px;
+            font-size: 14px;
+        }
+    }
+}

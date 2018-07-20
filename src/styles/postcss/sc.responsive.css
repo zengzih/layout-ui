@@ -1,0 +1,187 @@
+@import "./common/sc.var.css";
+@import "../../theme/common/var.css";
+@import "./mixins/sc.mixins.util.css";
+
+@media only screen and (max-width: 1366px) {
+@component-namespace sc {
+    /* 弹出框 */
+    .el-dialog__wrapper {
+            &.sc-middle {
+                .el-dialog {
+                    &.el-dialog--tiny,&.el-dialog--small,&.el-dialog--large,&.el-dialog--full {
+                        width: 700px;
+                    }
+                }
+            }
+            
+            &.sc-large {
+                .el-dialog {
+                    &.el-dialog--tiny,&.el-dialog--small,&.el-dialog--large,&.el-dialog--full {
+                        width: 800px;
+                    }
+                }
+            }
+        
+            /*by voice */
+        
+        }
+
+    /* 容器 */
+    @b admin {
+        @e header {
+            height: 40px;
+
+            @e hd {
+                height: 40px;
+                width: 160px;
+                img {
+                    height: 28px;
+                    margin-top: 6px;
+                }
+            }
+            @e bd {
+            	margin-left: 160px;
+                .btn-toggle {
+                    height: 40px;
+                    width: 40px;
+                    &+.sc-tabs {
+                        margin-left: 40px;
+                    }
+                }
+            }
+            @e ft {
+                height: 40px;
+            }
+        }
+        @e content {
+            margin-left: 160px;
+            margin-top: 41px;
+
+            @e hd {
+                top: 41px;
+                left: 160px;
+                &+.sc-admin__content__bd {
+                    margin-top: 41px;
+                }
+            }
+            @e bd {
+                top: 41px;
+                left: 160px;
+            }
+        }
+        @e sider {
+            margin-top: 40px;
+            width: 160px;
+        }
+
+        @when toggle {
+            .sc-admin__header__hd {
+                width: 40px;
+            }
+            .sc-admin__header__bd {
+                margin-left: 40px;
+            }
+            .sc-admin__sider {
+                width: 40px;
+            }
+            .sc-admin__content {
+                margin-left: 40px;
+                .sc-admin__content__hd {
+                    left: 40px;
+                }
+                .sc-admin__content__bd {
+                    left: 40px;
+                }
+            }
+            .sc-navmenu--sub {
+                left: 40px;
+            }
+        }
+    }
+
+    @b tabs {
+        height: 40px;
+        @e navleft {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+        }
+        @e body {
+            margin-left: 40px;
+            margin-right: 40px;
+            height: 40px;
+            line-height: 40px;
+        }
+        @e navright {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+        }
+    }
+
+    @b tab {
+        height: 40px;
+        line-height: 40px;
+
+        a{
+            height: 40px;
+        }
+
+        .close {
+            top: 14px;
+        }
+    }
+
+    @b navmenu {
+        bottom:36px;
+
+        @e navbot {
+            height: 36px;
+            line-height: 36px;
+        }
+        @e item {
+           height: 30px;
+		       line-height: 30px;
+           padding: 0 15px;
+           cursor: pointer;
+           i+span {
+            margin-left: 3px;
+           }
+        }
+
+        @m sub {
+            top: 41px;
+            left: 160px;
+            padding-top:5px;
+            padding-bottom:5px;
+            @e item {
+                padding-left: 15px;
+                .label {
+                    padding: 5px 20px 5px 0;
+                }
+            }
+        }
+    }
+
+    @b notification {
+        line-height: 40px;
+        height: 40px;
+        width: 70px;
+    }
+    @b usermenu {
+        height: 40px;
+        line-height: 40px;
+    }
+}
+
+.el-table th, .el-table td {
+    height: 18px;
+}
+
+.el-table .cell {
+    line-height: 18px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+}

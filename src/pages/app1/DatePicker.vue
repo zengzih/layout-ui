@@ -1,0 +1,192 @@
+<template>
+  <page sc-title='DatePicker 日期选择器'>
+    <block sc-title='选择日' class="demo-block-wrap1">
+	  <div class="demo-block">
+		<span class="demonstration">默认</span>
+    <el-date-picker
+      v-model="value1"
+      type="date"
+      placeholder="选择日期"
+      :picker-options="pickerOptions0">
+    </el-date-picker>
+	  </div>
+	  
+	  <div class="demo-block">
+		<span class="demonstration">带快捷选项</span>
+    <el-date-picker
+      v-model="value2"
+      align="right"
+      type="date"
+      placeholder="选择日期"
+      :picker-options="pickerOptions1">
+    </el-date-picker>
+	  </div>
+    </block>
+	
+	<block sc-title='其他日期单位'>
+	<div class="demo-block-wrap2">
+	  <div class="demo-block">
+	  <span class="demonstration">周</span>
+  <el-date-picker
+    v-model="value3"
+    type="week"
+    format="yyyy 第 WW 周"
+    placeholder="选择周">
+  </el-date-picker>
+	</div>
+	
+	<div class="demo-block">
+		<span class="demonstration">月</span>
+  <el-date-picker
+    v-model="value4"
+    type="month"
+    placeholder="选择月">
+  </el-date-picker>
+	</div>
+	
+	<div class="demo-block">
+		 <span class="demonstration">年</span>
+  <el-date-picker
+    v-model="value5"
+    align="right"
+    type="year"
+    placeholder="选择年">
+  </el-date-picker>
+	</div>
+	
+	</div>
+    </block>
+	
+	<block sc-title='选择日期范围' class="demo-block-wrap1">
+	  <div class="demo-block">
+		<span class="demonstration">默认</span>
+    <el-date-picker
+      v-model="value6"
+      type="daterange"
+      placeholder="选择日期范围">
+    </el-date-picker>
+	  </div>
+	  
+	  <div class="demo-block">
+	  <span class="demonstration">带快捷选项</span>
+    <el-date-picker
+      v-model="value7"
+      type="daterange"
+      align="right"
+      placeholder="选择日期范围"
+      :picker-options="pickerOptions2">
+    </el-date-picker>
+	  </div>
+    </block>
+  </page>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      pickerOptions0: {
+        disabledDate (time) {
+          return time.getTime() < Date.now() - 8.64e7
+        }
+      },
+      pickerOptions1: {
+        shortcuts: [{
+          text: '今天',
+          onClick (picker) {
+            picker.$emit('pick', new Date())
+          }
+        }, {
+          text: '昨天',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24)
+            picker.$emit('pick', date)
+          }
+        }, {
+          text: '一周前',
+          onClick (picker) {
+            const date = new Date()
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', date)
+          }
+        }]
+      },
+      value1: '',
+      value2: '',
+      value3: '',
+      value4: '',
+      value5: '',
+      pickerOptions2: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      value6: '',
+      value7: ''
+    }
+  },
+  methods: {
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.demo-block-wrap1 {
+.demo-block {
+    padding: 30px 0;
+    text-align: center;
+    border-right: 1px solid #eff2f6;
+    float: left;
+    width: 50%;
+    box-sizing: border-box;
+    &:last-child {
+        border-right: none;
+    }
+    .demonstration {
+        display: block;
+        color: #8492a6;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+}
+}
+
+.demo-block-wrap2 {
+	padding: 0;
+	display: -ms-flexbox;
+	display: flex;
+    .demo-block{
+		padding: 30px 0;
+		text-align: center;
+		border-right: 1px solid #eff2f6;
+		-ms-flex: 1;
+		flex: 1;
+		&:last-child {
+			border-right: none;
+		}
+	}
+}
+</style>

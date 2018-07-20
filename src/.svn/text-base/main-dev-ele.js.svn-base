@@ -1,0 +1,79 @@
+import './theme/index.css'  // 饿了么PostCSS源文件入口文件
+
+import './styles/postcss/sc.base.css' // 全局规范：盒模型、字体、标准内边距、标准边距
+import './styles/postcss/sc.layout.css' // 布局：五方图、表单混合列布局
+import './styles/postcss/sc.com.css' // 饿了么组件样式定制
+import './styles/postcss/sc.window.css' // 尚城窗体样式
+
+
+/* 引入字体图标文件 */
+import './lib/iconfont/iconfont.css'
+
+
+ /*
+   演示页面组件样式
+   ------------------------
+ */
+import './styles/less/atomic.less'  // Page, Block 组件样式
+
+import App from './App'
+import router from './router/index4'
+
+/*
+  Vue插件注册
+  -----------------
+*/
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+//import ElementUI from './lib/element/src/index2'
+import './lib/jquery/jquery-easyui-1.5.2/jquery.min.js' // easyui 依赖的jquery库文件
+import './lib/jquery/jquery-easyui-1.5.2/jquery.easyui.min.js'  // easyui 脚本文件
+import './lib/jquery/jquery-easyui-1.5.2/themes/default/easyui.css'  // easyui 默认主题样式文件
+/*
+  Vue全局组件注册
+  -----------------
+*/
+import Page from './components/atomic/page'
+import Block from './components/atomic/block'
+import Admin from './components/admin'
+import Layout from './components/base/layout'
+import ScFormLayout from './components/base/FormLayout'
+import ScFormLayoutItem from './components/base/FormLayoutItem'
+import ScFormLayoutRow from './components/base/FormLayoutRow'
+import scAdvanceQuery from './components/base/advanceQuery'
+import scFormGroup from './components/base/formGroup'
+import scSideTab from './components/base/sideTab'
+import scDataGrid from './components/base/dataGrid' // by 曾子涵
+// import scTreeGrid from './components/base/treegrid' // by 曾子涵
+import scTreeGrid from './components/base/treegrid'
+import scTabStep from './components/base/tabStep'
+
+Vue.component('page', Page)
+Vue.component('block', Block)
+Vue.component('sc-admin', Admin)
+Vue.component('sc-layout', Layout)
+Vue.component('sc-form-layout', ScFormLayout)
+Vue.component('sc-form-layout-col', ScFormLayoutItem)
+Vue.component('sc-form-layout-row', ScFormLayoutRow)
+Vue.component('sc-advance-query', scAdvanceQuery)
+Vue.component('sc-form-group', scFormGroup)
+Vue.component('sc-side-tab', scSideTab)
+Vue.component('sc-data-grid', scDataGrid)
+Vue.component('sc-tree-grid', scTreeGrid)
+//Vue.component('sc-tab-step', scTabStep)
+ Vue.component('sc-tab-step', scTabStep)
+
+Vue.use(ElementUI)
+
+Vue.config.productionTip = false
+
+/*
+  Vue 实例化应用
+  -----------------
+*/
+var VueApp = new Vue({
+  el: '#app',
+  router,
+  template: '<App/>',
+  components: { App }
+});

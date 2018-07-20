@@ -1,0 +1,74 @@
+@charset "utf-8";
+
+@import "../common/sc.var.css";
+@import "../../../theme/common/var.css";
+@import "../mixins/sc.mixins.util.css";
+@import "../common/sc.animate.css";
+
+@component-namespace sc {
+	/*----第一种样式  不论分辨率设置单元格的大小*/
+	.sc-theme-mini-fix {
+		.el-table {
+			th, td {
+				height: auto;
+				
+				.cell {
+					height: 24px!important;
+					line-height: 24px!important;
+					padding-left: 5px!important;
+					padding-right: 5px!important;
+					
+					.el-button {
+						height: auto;
+					}
+					div {
+						height: 24px!important;
+						line-height: 24px!important;
+						
+						span, input{
+							height: 24px!important;
+							line-height: 24px!important;
+						}
+					}
+					div.el-switch__label {
+						span {
+							top:0!important;
+						}
+					}
+				}
+			}
+		}
+			/* 弹出框 */
+	    .el-dialog__wrapper {
+            &.sc-middle {
+                .el-dialog {
+                    &.el-dialog--tiny,&.el-dialog--small,&.el-dialog--large,&.el-dialog--full {
+                        width: 700px;
+                    }
+                }
+                .el-dialog__header {
+                	height: auto;
+                	line-height: inherit;
+                	padding: 10px 20px;
+                }
+                .el-dialog__body {
+                	padding: 20px;
+                }
+                .el-dialog__footer {
+                	height: 46px;
+                	padding: 6px 20px 15px;
+                }
+            }
+            
+            &.sc-large {
+                .el-dialog {
+                    &.el-dialog--tiny,&.el-dialog--small,&.el-dialog--large,&.el-dialog--full {
+                        width: 800px;
+                    }
+                }
+            }	        
+	    }
+	}
+}
+
+ 

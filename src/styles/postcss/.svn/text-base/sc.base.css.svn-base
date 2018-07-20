@@ -1,0 +1,139 @@
+@import "../../theme/common/var.css";
+
+* {
+  margin:0;
+  padding:0;
+}
+body {
+  background-color:#ededef;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+ul,li {
+	list-style: none;
+}
+
+[v-cloak] {
+   display: none;
+}
+
+.iblock {
+	display: inline-block;
+}
+
+.tag {
+	display: inline-block;
+	border: 1px solid #29CDC7;
+	border-radius: 2px;
+	height: 24px;
+	line-height: 24px;
+	padding: 0 6px;
+	font-size: 12px;
+	
+	&+.tag {
+		margin-left: 10px;
+	}
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+/*
+  颜色
+  ----------
+*/
+.primary {
+	color: var(--color-primary)
+}
+.blue {
+	color: #20A0FF
+}
+.green {
+	color: #13CE66
+}
+.red {
+	color: #FF4949
+}
+.grey {
+	color: #e0e0e0;
+}
+.yellow {
+	color: #F7BA2A
+}
+.bgcolor {
+	background-color: #fff;
+}
+
+
+/*
+  边距
+  ----------
+*/
+.padding {
+	padding: 15px;
+}
+
+.ypadding {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+.xpadding {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.margin {
+	margin:15px;
+}
+
+.lmargin {
+	margin-left: 15px;
+}
+
+.rmargin {
+	margin-right: 15px;
+}
+
+.tmargin {
+	margin-top: 15px;
+}
+
+.bmargin {
+	margin-bottom: 15px;
+}
+
+.xmargin {
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.ymargin {
+	margin-top:15px;
+	margin-bottom:15px;
+}
+
+/*
+  边框
+  ----------
+*/
+.border {
+	border: 1px solid #C3C9D3;
+}
+
+/*
+  对齐方式
+  ----------
+*/
+.left {
+	text-align: left;
+}
+
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}

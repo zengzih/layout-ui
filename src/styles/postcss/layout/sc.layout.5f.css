@@ -1,0 +1,151 @@
+@component-namespace sc {
+	/* 内容 */
+	@b theme {
+		.panel {
+			.panel-header {
+				background: var(--color-primary);
+				color: var(--color-white);
+				border-with:1px;
+				padding: 5px 10px;
+				.panel-title {
+					font-size: 16px;
+					font-weight: 300;
+					color: var(--color-white);
+				}
+				.panel-tool {}
+			}
+			.panel-body {
+				background: var(--color-white);
+				border:0;
+				
+			}
+			
+			&.layout-split-east {
+				border-color: var(--page-back-color);
+				border-width: var(--panel-gap);
+			}
+			&.layout-split-west {
+				border-color: var(--page-back-color);
+				border-width: var(--panel-gap);
+			}
+			&.layout-split-south {
+				border-color: var(--page-back-color);
+				border-width: var(--panel-gap);
+			}
+			&.layout-split-north {
+				border-color: var(--page-back-color);
+				border-width: var(--panel-gap);
+			}
+		}
+		.layout {
+			.layout-panel {
+				
+			}
+		}
+	}
+	
+	@b pannel {
+		position: absolute;
+		top:0;
+		bottom:0;
+		width:100%;
+		overflow: auto;
+	}
+	
+	.sc-expander {
+		position: absolute;
+		background-color: var(--page-back-color);
+		overflow: hidden;
+		@when west {
+			top: 0px; bottom: 0px; left: -28px;
+			z-index: 10;
+			width:28px;
+		}
+		@when east {
+			top: 0px; bottom: 0px; right: -28px;
+			z-index: 10;
+			width:28px;
+		}
+	}
+	
+	@b layout {
+		@m 5f {
+			@when noheader {
+				.panel-header {
+					padding: 0;
+					height: 0;
+					border: 0;
+					display: none;
+				}
+			}
+			
+			@when noexpander {
+				.layout-expand {
+					display: none;
+				}
+			}
+
+			.layout-panel.layout-panel-center {
+				overflow: visible;
+			}
+			.layout-panel-center {
+				.layout-body {
+					overflow-x: visible;
+				}
+			}
+			
+			.layout-panel-west, .layout-panel-east, .layout-panel-north, .layout-panel-south {
+				.layout-body {
+				}
+			}
+			
+			@when gap-line {
+				.panel {
+					&.layout-split-east, &.layout-split-west, &.layout-split-south, &.layout-split-north {
+						border-width: var(--panel-gap-line);
+					}
+				}
+			}
+			
+			@when gap-normal {
+				.panel {
+					&.layout-split-east, &.layout-split-west, &.layout-split-south, &.layout-split-north {
+						border-width: var(--panel-gap-normal);
+					}
+				}
+			}
+			
+			@when gap-sm {
+				.panel {
+					&.layout-split-east, &.layout-split-west, &.layout-split-south, &.layout-split-north {
+						border-width: var(--panel-gap-small);
+					}
+				}
+			}
+			
+			@when gap-md {
+				.panel {
+					&.layout-split-east, &.layout-split-west, &.layout-split-south, &.layout-split-north {
+						border-width: var(--panel-gap-middle);
+					}
+				}
+			}
+			
+			@when gap-lg {
+				.panel {
+					&.layout-split-east, &.layout-split-west, &.layout-split-south, &.layout-split-north {
+						border-width: var(--panel-gap-large);
+					}
+				}
+			}
+			
+			@when gap-none {
+				.panel {
+					&.layout-split-east, &.layout-split-west, &.layout-split-south, &.layout-split-north {
+						border-width: 0;
+					}
+				}
+			}
+		}
+	}
+}

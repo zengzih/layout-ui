@@ -1,0 +1,135 @@
+@import "../common/sc.var.css";
+@import "../mixins/sc.mixins.util.css";
+
+@component-namespace sc {
+	/* 内容 */
+	@b theme {
+		@when standard {
+			padding: 15px;
+			
+			.el-row:first-child {
+				height: 36px;
+				overflow:hidden;
+				margin-bottom: var(--content-padding-verticle);
+
+				.el-form {
+					text-align: right;
+					.el-form-item {
+						& + .el-form-item {
+							margin-left: 15px;
+						}
+						.el-form-item__label {
+							padding-right: 6px;
+						}
+						margin-bottom: 0;
+						margin-right: 0;
+						display: inline-block;
+					}
+				}
+			}
+			
+			& .el-button.el-button--small {
+				min-width: auto;
+			}
+			
+			.sc-theme__table {
+				height: calc(100% - 90px);
+				background-color: #fff;
+				overflow-y: scroll;
+			}
+			
+			& .el-table__body-wrapper {
+				height: calc(100% - 90px);
+			}
+			
+			.el-pagination {
+				@mixin container; 
+				padding: 0;
+				margin-top: 10px;
+				text-align: right;
+			}
+			
+			& .el-dialog {
+				.el-dialog__header {
+					border-bottom: 1px solid #E7EEF9;
+				}
+				.el-dialog__body {
+					.el-form--inline {
+						@mixin container;
+						overflow:visible;
+						.el-form-item {
+							margin-right: 0;
+							height: 36px;
+							margin-bottom: 20px;
+							box-sizing: border-box;
+							/* width: 50%;
+							float: left; */
+							&:last-child {
+								margin-bottom: 0;
+							}
+							.el-form-item__label {
+								box-sizing: border-box;
+								/* width:100px; */
+								text-align:right;
+							}
+							.el-form-item__content {
+								height: 36px;
+								box-sizing: border-box;
+								/* width:60%; */
+							}
+							.el-input, .el-select {
+								width: 100%;
+							}
+						}
+					}
+					.el-form {
+						@when single-col {
+							.el-form-item {
+								width: 90%;
+								display: block;
+								margin-bottom: 10px;
+								
+								.el-form-item__label {
+									box-sizing: border-box;
+									width:200px;
+									text-align:right;
+									padding-right: 20px;
+								}
+								.el-form-item__content {
+									width:50%;
+									.el-form-item__error {
+										top: 0;
+										left: 100%;
+										width: 100px;
+										height: 36px;
+										line-height: 28px;
+										margin-left: 10px;
+									}
+								}
+							}
+						}
+					}
+				}
+				& .el-dialog--tiny  {
+					.el-dialog__body {
+					.el-form--inline {
+						.el-form-item {
+							.el-form-item__content {
+								width: 210px;
+							}
+						}
+					}
+					}
+				}
+				.el-dialog__footer {
+					border-top: 1px solid #E7EEF9;
+					height: 62px;
+					padding: 15px 20px;
+					.dialog-footer {
+						text-align: right;
+					}
+				}
+			}
+		}
+	}
+}

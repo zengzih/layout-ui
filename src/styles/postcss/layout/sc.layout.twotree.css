@@ -1,0 +1,35 @@
+@component-namespace sc {
+	@b two-tree {
+		height: 100%;
+        &>.el-col {
+            height: 100%;
+            border:1px solid #ddd;
+            background: #fff;
+            padding: 20px;
+            overflow-y:auto;
+        } 
+        &>.el-col:nth-of-type(2) {
+            border:none;
+            background: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .to-left,.to-right {
+            text-align: center;
+            height: 50%;
+            position: relative;
+            text-align: center;
+            &>i{
+                font-size: 32px;
+                color: #888;
+                position: absolute;
+                top:50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+            }
+        }
+        .el-tree {
+            border: none;
+        }
+    }
+}

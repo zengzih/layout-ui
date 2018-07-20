@@ -1,0 +1,324 @@
+<template>
+  <div class="sc-side-tab" :style="getContentStyle()">
+    <div class="tab_nav" :class="{styleLine:isStyleLine}">
+      <div class="nav_menu_left">
+        <ul class="nav nav-tabs" :class="{ul_styleLine:isStyleLine}">
+          <li v-for="(item,index) in LevelMenuOption" @click="getSel(index,item)"  :style="getCanvasStyle(item, index)"
+              :class="[getLiClass(index),noneLine(index)]">
+            <div class="my_canvas" :style="getCanvasStyle(item, index)">
+              <span v-if="!isStyleLine" class="line"></span>
+              <span v-if="isStyleLine" class="styleLine_icon_arrow iconfont icon-angle-right"></span>
+              <canvas :id="item.cId" width=42  height=183    :style="getCanvasStyle(item, index)"></canvas>
+              <a data-toggle="tab" class="a_tab_name" v-if="!isStyleLine">{{item.tabName}}</a>
+              <a data-toggle="tab" class="tab_nav_a" v-else>
+                <span class="tab_nav_a_line"></span>
+                <div class="step_box">
+                  <span>{{item.stepName}}</span>
+                  <span>{{item.tabName}}</span>
+                </div>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div :class="getNavContentClass()" v-if="iframeModel">
+        <iframe v-for="(ifr,index) in LevelMenuOption" style="height: 100% !important;" :class="getIframeClass(index)"
+                :src="getIframeUrl(index,ifr.requestUrl)" :id="addStyle(index)" frameborder="0"
+                v-on:click="computedHeight($event)" :scrolling="changeIframeScrolling">
+        </iframe>
+      </div>
+      <div style="clear:both"></div>
+      <div :class="getNavContentClass()" v-if="!iframeModel">
+        <div v-for="(slots,index) in LevelMenuOption" style="height: 100% !important;" :class="getIframeClass(index)"
+             :id="addStyle(index)">
+          <slot :name="slots.slotName"></slot>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'sideTab',
+    props: {
+      iframeModel: {
+        type: Boolean,
+        default(){
+          return false
+        }
+      },
+      levelMenuOption: {
+        type: Array,
+        default(){
+          return []
+        }
+      },
+      themes: {
+        type: String,
+        default(){
+          return ""
+        }
+      },
+      position: {
+        type: String,
+        default(){
+          return ""
+        }
+      },
+      activeBgColor: {
+        type: String,
+        default(){
+          return ""
+        }
+      },
+      bgColor: {
+        type: String,
+        default(){
+          return ""
+        }
+      },
+      styleLine:{
+        type:Boolean,
+        default(){
+          return false
+        }
+      },
+      changeNavHeightNameMinLength:{
+        type:String,
+        default(){
+          return ""
+        }
+      },
+      height:{
+        type:String,
+        default(){
+          return ""
+        }
+      },
+      width:{
+        type:String,
+        default(){
+          return "100%"
+        }
+      }
+    },
+    watch:{
+      width:{
+        handler(val){
+          this.widths = val;
+        }
+      },
+      height:{
+        handler(val){
+          this.heights = val;
+        }
+      },
+    },
+    data: function () {
+      var changeNavHeightNameMinLength = 8;//默认触发nav 高度改变 字数长度
+      var tabLength = "";
+      var navNameMaxLength = "";
+      changeNavHeightNameMinLength = this.changeNavHeightNameMinLength || changeNavHeightNameMinLength;
+      var navNameLengthArr = [];
+      var arrIndex = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十"];
+      for (var i in this.levelMenuOption) {
+        this.levelMenuOption[i]["stepName"] = "第" + arrIndex[i] + "步";
+        this.levelMenuOption[i].cId = 'navTabCanvas' + i;
+        i == 0 ? this.levelMenuOption[i].active = true : this.levelMenuOption[i].active = false;
+        navNameLengthArr.push(this.levelMenuOption[i].tabName.length || 0);
+      }
+      tabLength = this.levelMenuOption.length;
+      navNameMaxLength = utils.getArrayMax(navNameLengthArr);
+      return {
+        fadeIndex: 0,
+        itemData: [],
+        LevelMenuOption: this.levelMenuOption,
+        changeNavHeightNameMinLengths: changeNavHeightNameMinLength,//最小触发nav 高度改变
+        navNameMaxLength: navNameMaxLength,
+        tabLength: tabLength,
+        navPosition: this.themes,
+        isStyleLine: this.styleLine,  //控制是否显示带线条的风格
+        heights:this.height,
+        widths:this.width,
+        tabStyle:{
+          width:this.width,
+          height:this.height
+        }
+      }
+    },
+    computed: {
+      changeIframeScrolling: function () {//console.log("navPosition=" + this.navPosition);
+        if (this.navPosition == "center") {
+          return "auto";
+        } else {
+          return "auto";
+        }
+      }
+    },
+    methods: {
+      getContentStyle(){
+        return ";width:"+this.widths+"px;height:"+this.heights+"px;";
+      },
+      getSlideActive(index){
+          if(this.fadeIndex == index){
+              return "active";
+          }
+      },
+      getIframeUrl: function (index, url) {
+        if (index == 0) {
+          return url;
+        } else {
+          return "";
+        }
+      },
+      computedHeight: function (event) {
+        console.log(event);
+      },
+      getNavContentClass: function () {
+          return "nav_content_left tab-content";
+      },
+      getNavBoxClass: function () {
+        if (this.navPosition == "left") {
+          return "nav_menu_left";
+        } else {
+          return "nav_menu";
+        }
+      },
+      getLiClass: function (index) {
+        if (index == this.fadeIndex) {
+         return "left_active";
+        }
+      },
+      getSel: function (index, item) {
+        for (var i in this.LevelMenuOption) {
+          i == index ? this.LevelMenuOption[i].active = true : this.LevelMenuOption[i].active = false;
+        }
+        console.log(this.LevelMenuOption);
+        this.fadeIndex = index;
+        if (this.iframeModel) {
+          var iframe = this.$el.getElementsByTagName("iframe");
+          if (iframe[index].getAttribute("src") == "") {
+            iframe[index].src = item.requestUrl;
+          }
+        }
+        this.creatCanvas();
+        //--1----wescLightNavEventBus.$emit("lightNavEvent");
+      },
+      addStyle: function (index, isfalse) {
+        if (isfalse) {
+          return "#nav" + index;
+        } else {
+          return "nav" + index;
+        }
+      },
+      getIframeClass: function (index) {
+        if (index == this.fadeIndex) {
+          return "tab-pane fade in active";
+        } else {
+          return "tab-pane fade";
+        }
+      },
+      getCanvasStyle: function (item, index) {
+        //alert(document.getElementsByClassName("a_tab_name")[0].offsetHeight);
+        if(this.navPosition == "left"){
+         var tabNamelength = utils.getWordByteLength(item.tabName);
+         tabNamelength = tabNamelength > 20 ? tabNamelength : 20;
+         var style="";
+         style += ";width: 42px; height: " + (183/20 * tabNamelength * 1.2) + "px";
+         return style;
+         }
+      },
+      setUlStyle: function () {  //设置ul的样式，比如 居中 居右神马的
+        /*switch (this.navPosition){
+         case "left":
+         return "float:left";
+         break;
+         case "center":
+         return "position:absolute;left:50%;transform:translateX(-50%);-webkit-transform:translateX(-50%);-moz-transform:translateX(-50%);-o-transform:translateX(-50%);-ms-transform:translateX(-50%)";
+         break;
+         case "right":
+         return "float:right";
+         break;
+         default:
+         return "";
+         break;
+         }*/
+      },
+      creatCanvas:function(){//初始化canvas\
+        for(var i in this.LevelMenuOption){
+          var fillColor_one = this.activeBgColor ? this.activeBgColor : '#95242a';
+          var fillColor_two = this.bgColor ? this.bgColor : '#f5f5f5';
+          var canvas = document.getElementById(this.LevelMenuOption[i].cId);
+
+          //canvas.setAttribute("class", "style2");
+          //canvas.style.height = 300 + "px";
+          var context=canvas.getContext('2d');
+          context.clearRect(0,0,42,170);
+          context.beginPath();
+          context.moveTo(2,30);
+          context.bezierCurveTo(2,7,2,13,42,2);
+          context.bezierCurveTo(42,70,42,120,42,170);
+          context.bezierCurveTo(2,159,2,165,2,140);
+          context.bezierCurveTo(2,110,2,70,2,30);
+          context.shadowOffsetX = -1; // 阴影Y轴偏移
+          context.shadowOffsetY = 0; // 阴影X轴偏移
+          context.shadowBlur = 8; // 模糊尺寸
+          context.shadowColor = 'rgba(255, 255, 255, 1)';
+          if(!this.LevelMenuOption[i].active){
+            context.shadowColor = 'rgba(153, 153, 153, 0.5)';
+          }
+          console.log(this.LevelMenuOption);
+          this.LevelMenuOption[i].active?context.fillStyle = fillColor_one:context.fillStyle = fillColor_two;
+          this.LevelMenuOption[i].active?context.strokeStyle =fillColor_one:context.strokeStyle =fillColor_two;
+          context.lineWidth = 1;
+          context.fill();
+          context.stroke(); //色勒外边框
+        }
+      },
+      /*creatCanvas: function () {//初始化canvas\
+        for (var i in this.LevelMenuOption) {
+          var fillColor_one = this.activeBgColor ? this.activeBgColor : '#95242a';
+          var fillColor_two = this.bgColor ? this.bgColor : '#f5f5f5';
+          var canvas = document.getElementById(this.LevelMenuOption[i].cId);
+
+          //canvas.setAttribute("class", "style2");
+          //canvas.style.height = 300 + "px";
+          var context = canvas.getContext('2d');
+          context.clearRect(0, 0, 42, 183);
+          context.beginPath();
+          context.moveTo(0, 30);
+          context.bezierCurveTo(0, 8, 4, 10, 42, 0);
+          context.bezierCurveTo(42, 183, 42, 183, 42, 183);
+          context.bezierCurveTo(4, 175, 0, 173, 0, 153);
+          //context.bezierCurveTo(5,85,5,55,5,40);
+          context.shadowOffsetX = -1; // 阴影x轴偏移
+          context.shadowOffsetY = 0; // 阴影y轴偏移
+          context.shadowBlur = 20; // 模糊尺寸
+          context.shadowColor = 'rgba(255, 255, 255, 1)';
+          if (!this.LevelMenuOption[i].active) {
+            context.shadowColor = 'rgba(153, 153, 153, 0.5)';
+          }
+          this.LevelMenuOption[i].active ? context.fillStyle = fillColor_one : context.fillStyle = fillColor_two;
+          this.LevelMenuOption[i].active ? context.strokeStyle = fillColor_one : context.strokeStyle = fillColor_two;
+          context.lineWidth = 1;
+          context.fill();
+          context.stroke(); //色勒外边框
+        }
+      },*/
+      noneLine: function (index) { //设置最后一个框框没有后面的横线
+        if (this.isStyleLine) {
+          var length = this.LevelMenuOption.length - 1;
+          if (index == length) {
+            return 'none';
+          }
+        }
+      }
+
+    },
+    mounted: function () {
+      this.creatCanvas();
+      console.log(this.LevelMenuOption);
+    }
+  };
+</script>

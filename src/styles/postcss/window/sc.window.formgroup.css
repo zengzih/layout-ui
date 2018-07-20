@@ -1,0 +1,33 @@
+@import "../common/sc.var.css";
+@import "../mixins/sc.mixins.util.css";
+
+@component-namespace sc {
+	/* form组样式 */
+	@b formgroup {
+		clear: both;
+		@e title {
+			padding: 15px 0 15px 0;
+		}
+		@e title.sign {
+			padding: 15px 0 15px 12px;
+			position: relative;
+			&.sign:before{
+				content:'';
+				position: absolute;
+				height:14px;
+				width:4px;
+				background:#5b7bfa;
+				top:18px;
+				left:0;
+			}
+		}
+		@e content {
+			overflow: hidden;
+			border: 1px solid #ccc;
+			padding: 10px;
+		}
+	}
+	.el-dialog__body>.el-form>.sc-formgroup:first-child{
+        margin-top: -30px;
+    }
+}

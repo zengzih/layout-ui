@@ -1,0 +1,13 @@
+@component-namespace sc {
+    @b edit-col {
+        
+        .cell {
+            padding-left: 1px;
+            padding-right: 1px;
+        }
+
+        .el-input__inner {
+            border-radius: 0px;
+        }
+    }
+}
